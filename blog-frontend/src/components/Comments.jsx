@@ -1,48 +1,58 @@
-import { useState, useEffect, useMemo } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { initializeComments, createComment } from "../reducers/commentReducer"
-import commentService from '../services/comments'
-import { setNotification } from "../reducers/notificationReducer"
-import { Button, TextField, Box, ThemeProvider, createTheme, Grid, Typography, List, ListItem, ListItemText, ListItemIcon } from "@mui/material"
-import { lime, orange } from '@mui/material/colors'
-import CommentIcon from '@mui/icons-material/Comment'
+import { useState, useEffect, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { initializeComments, createComment } from "../reducers/commentReducer";
+import commentService from "../services/comments";
+import { setNotification } from "../reducers/notificationReducer";
+import {
+  Button,
+  TextField,
+  Box,
+  ThemeProvider,
+  createTheme,
+  Grid,
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+} from "@mui/material";
+import { lime, orange } from "@mui/material/colors";
+import CommentIcon from "@mui/icons-material/Comment";
 
 const theme = createTheme({
   palette: {
     primary: lime,
-    secondary: orange
-  }
-})
+    secondary: orange,
+  },
+});
 
 const Comments = ({ blogId }) => {
-  const [comment, setComment] = useState('')
+  const [comment, setComment] = useState("");
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("in useeffect init comments")
-    commentService.getAll(blogId).then(comments => {
-      console.log("comments useEffect", comments)
-      dispatch(initializeComments(comments, blogId))
-    })
-  }, [dispatch])
+    commentService.getAll(blogId).then((comments) => {
+      dispatch(initializeComments(comments, blogId));
+    });
+  }, [dispatch]);
 
-  const commentsToShow = useSelector(({comments}) => {
-    return comments
-  })
+  const commentsToShow = useSelector(({ comments }) => {
+    return comments;
+  });
 
   const onPost = (e) => {
-    e.preventDefault()
-    setComment('')
+    e.preventDefault();
+    setComment("");
 
     const newComment = {
       content: comment,
-      blog: blogId
-    }
+      blog: blogId,
+    };
 
-    dispatch(createComment(newComment))
-    dispatch(setNotification(`Added a new comment`, 5, "notification"))
-  }
+    dispatch(createComment(newComment));
+    dispatch(setNotification(`Added a new comment`, 5, "notification"));
+  };
 
   return (
     <div>
@@ -53,7 +63,7 @@ const Comments = ({ blogId }) => {
         <form onSubmit={onPost}>
           <Box
             sx={{
-              '& .MuiTextField-root': { m: 0.25, width: '30ch' },
+              "& .MuiTextField-root": { m: 0.25, width: "30ch" },
             }}
             noValidate
             autoComplete="off"
@@ -64,14 +74,9 @@ const Comments = ({ blogId }) => {
               onChange={(e) => setComment(e.target.value)}
               variant="outlined"
               label="comment"
-            />
-            {' '}
-
+            />{" "}
           </Box>
-          <Button
-            type="submit"
-            variant="contained"
-          >
+          <Button type="submit" variant="contained">
             add comment
           </Button>
         </form>
@@ -79,11 +84,11 @@ const Comments = ({ blogId }) => {
           <Grid item xs={12} md={6}>
             <List>
               {commentsToShow.map((c) => (
-                <ListItem>
+                <ListItem key={c.id}>
                   <ListItemIcon edge="start">
                     <CommentIcon />
                   </ListItemIcon>
-                  <ListItemText key={c.id}>{c.content}</ListItemText>
+                  <ListItemText>{c.content}</ListItemText>
                 </ListItem>
               ))}
             </List>
@@ -91,7 +96,7 @@ const Comments = ({ blogId }) => {
         </Grid>
       </ThemeProvider>
     </div>
-  )
-}
+  );
+};
 
-export default Comments
+export default Comments;

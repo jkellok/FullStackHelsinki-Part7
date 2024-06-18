@@ -64,6 +64,4 @@ blogsRouter.put("/:id", async (request, response) => {
   response.json(updatedBlog);
 });
 
-// or add comment here? /:id/comments
-
 module.exports = blogsRouter;

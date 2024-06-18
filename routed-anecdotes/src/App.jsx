@@ -56,13 +56,9 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
-  //const [content, setContent] = useState(useField('text'))
-  const content = useField('text')
-  const author = useField('text')
-  const info = useField('text')
-  const reset = useField('button', content)
-
-  console.log("reset", reset)
+  const { reset: resetContent, ...content } = useField('text')
+  const { reset: resetAuthor, ...author } = useField('text')
+  const { reset: resetInfo, ...info } = useField('text')
 
   const navigate = useNavigate()
 
@@ -77,8 +73,10 @@ const CreateNew = (props) => {
     navigate('/')
   }
 
-
   const handleReset = () => {
+    resetContent();
+    resetAuthor();
+    resetInfo();
   }
 
   return (
@@ -100,7 +98,7 @@ const CreateNew = (props) => {
         <button>create</button>
 
       </form>
-      <button onClick={reset.onClick} >reset</button>
+      <button onClick={handleReset} >reset</button>
 
     </div>
   )

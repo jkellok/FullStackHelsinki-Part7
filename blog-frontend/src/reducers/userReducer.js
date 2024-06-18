@@ -1,24 +1,26 @@
 import { createSlice } from "@reduxjs/toolkit";
-import storage from '../services/storage'
-
-// store info about signed-in user in redux store
 
 const slice = createSlice({
-  name: 'user',
+  name: "user",
   initialState: {
-    userInfo: {},
-    username: null,
-    token: null
+    name: "",
+    username: "",
+    token: "",
   },
   reducers: {
-    setUser(state, action) {
-      return action.payload
+    userLogin(state, action) {
+      return {
+        ...state,
+        name: action.payload.name,
+        username: action.payload.username,
+        token: action.payload.token,
+      };
     },
-    getUser(state, action) {
-      return state
-    }
-  }
-})
+    userLogout(state, action) {
+      return { ...state, name: "", username: "", token: "" };
+    },
+  },
+});
 
-export const { setUser } = slice.actions
-export default slice.reducer
+export const { userLogin, userLogout } = slice.actions;
+export default slice.reducer;
